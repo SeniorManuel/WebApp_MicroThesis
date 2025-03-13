@@ -17,9 +17,9 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    const details = onSnapshot(collection(db, "users"), (snapshot) => {
+    const details = onSnapshot(collection(db, "users"), (snapshot) => { 
       const usersList = snapshot.docs.map(doc => ({...doc.data(),uid: doc.id}));
-      const filterAd = usersList.filter(user => user.uid !== currentUser?.uid)
+      const filterAd = usersList.filter(user => !user.isAdmin); // filter admin
       setUsers(filterAd);
     });
     return () => details();  

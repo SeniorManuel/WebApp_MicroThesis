@@ -2,19 +2,19 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 
-const AuthContext = createContext();
+const AuthContext = createContext(); 
 
-export function useAuth() {
+export function useAuth() { //for global and ease of use, using useAuth
     return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) { 
-    const [currentUser, setCurrentUser] = useState(null);
-    const [userLoggedIn, setUserLoggedIn] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState(null); //stores logged in user
+    const [userLoggedIn, setUserLoggedIn] = useState(false); //true if logged in false if not
+    const [loading, setLoading] = useState(true); //firebase checks the use status
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => { 
             setCurrentUser(user);
             setUserLoggedIn(!!user);
             setLoading(false);
@@ -39,9 +39,9 @@ export function AuthProvider({ children }) {
         logout 
     };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
+    return ( 
+        <AuthContext.Provider value={value}> 
+            {!loading && children} 
         </AuthContext.Provider>
-    );
+    ); // let components of const value use useAuth
 }

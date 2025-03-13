@@ -11,20 +11,21 @@ function Login() {
   const { login } = useAuth(); 
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault(); //prevents refreshing
+    setError(""); //clears previos error
 
     try {
-      const userCredential = await login(email, password);
+      const userCredential = await login(email, password);  //call login function in auth
       const user = userCredential.user;
 
-      if (user.uid !== "ERHcLHdhmSVJlaTMlnd8eyTpdkC2") {
+      if (user.uid !== "ERHcLHdhmSVJlaTMlnd8eyTpdkC2") { //admin login
         setError("Unauthorized: Only Admin can log in.");
         await logout();
         return;
       }
       
-      navigate("/dashboard"); 
+      navigate("/dashboard");
+
     } catch (err) {
       if (err.code === "auth/user-not-found") {
         setError("Email not found. Please check your email.");
