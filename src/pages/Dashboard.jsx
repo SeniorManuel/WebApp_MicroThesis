@@ -5,6 +5,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import Header from "../components/Header";
 import { Card, Container } from "react-bootstrap";
+import { doc, deleteDoc } from "firebase/firestore";
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
@@ -15,6 +16,23 @@ const Dashboard = () => {
     navigate("/");
     return null;
   }
+
+  const handleDeleteUser = async (uid) => {
+    try {
+      const response = await fetch(`http://localhost:5000/delete-user/${uid}`, {
+        method: "DELETE",
+      });
+  
+      if (response.ok) {
+        alert("User deleted successfully!");
+      } else {
+        alert("Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  
 
   useEffect(() => {
     const details = onSnapshot(collection(db, "users"), (snapshot) => { 
@@ -37,6 +55,9 @@ const Dashboard = () => {
                 <p className="card-text">{currentUser.fullName}</p>
                 <h5 className="card-title">Email Address:</h5>
                 <p className="card-text">{currentUser.email}</p>
+                <button onClick={() => handleDeleteUser(currentUser.uid)} className="btn btn-danger">
+                  Delete
+                </button>
               </Card.Body>
             </Card>
           ))}
