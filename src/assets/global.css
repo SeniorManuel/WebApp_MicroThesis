@@ -1,0 +1,18 @@
+html, body, #root {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(10px);
+  border: none;
+}
+
+body {
+  background: linear-gradient(135deg, #8a3ae0 0%, #487fdf 100%);
+  background-attachment: fixed; 
+  background-size: cover;
+}
+

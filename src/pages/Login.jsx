@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Card } from "react-bootstrap";
+import '../assets/global.css';
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ function Login() {
       const userCredential = await login(email, password);  //call login function in auth
       const user = userCredential.user;
 
-      if (user.uid !== "ERHcLHdhmSVJlaTMlnd8eyTpdkC2") { //admin login
+      if (user.uid !== "HZ9fKFnBvYOmji37rTkxZnwz3FL2") { //admin login
         setError("Unauthorized: Only Admin can log in.");
         await logout();
         return;
@@ -41,7 +42,7 @@ function Login() {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <Card style={{ width: "28rem"}}>
+      <Card style={{ width: "28rem" }}>
         <Card.Body>
           <h2 className="text-center mb-4">Admin Login</h2>
           {error && <p className="text-danger text-center">{error}</p>}

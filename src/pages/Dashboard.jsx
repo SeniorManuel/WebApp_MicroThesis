@@ -5,22 +5,23 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import Header from "../components/Header";
 import { Card, Container } from "react-bootstrap";
-import { doc, deleteDoc } from "firebase/firestore";
+import '../assets/global.css';
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
   if (!currentUser) {
     navigate("/");
-    return null;
   }
+  }, [currentUser, navigate]);
 
   const handleDeleteUser = async (uid) => {
     try {
       const response = await fetch(`http://localhost:5000/delete-user/${uid}`, {
-        method: "DELETE",
+        method: "DELETE", // sends delete request to backend
       });
   
       if (response.ok) {
@@ -44,10 +45,11 @@ const Dashboard = () => {
   }, [currentUser]);
 
   return (
-    <div className="d-flex justify-content-center align-items-start min-vh-100" style={{ paddingTop: "40px"}}>
+    <div 
+      className="d-flex justify-content-center align-items-start min-vh-100" >
       <Header />
       <Container className="mt-5">
-        <h2 className="text-center mb-4">Registered Users</h2>
+        <h2 className="text-center mt-5 mb-4">Registered Users</h2>
           {users.map((currentUser, index) => (
             <Card key={index} className="mb-3 shadow-sm">
               <Card.Body>
@@ -67,4 +69,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

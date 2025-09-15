@@ -15,17 +15,17 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount), // initializes firebase admin sdk with service account
 });
 
 const db = getFirestore();
 
-app.delete("/delete-user/:uid", async (req, res) => {
+app.delete("/delete-user/:uid", async (req, res) => { // delete user
   const { uid } = req.params;
 
   try {
-    await admin.auth().deleteUser(uid); 
-    await db.collection("users").doc(uid).delete(); 
+    await admin.auth().deleteUser(uid); // delete user from firebase auth
+    await db.collection("users").doc(uid).delete(); // delete user from firestore
 
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {

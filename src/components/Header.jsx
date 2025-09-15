@@ -1,6 +1,7 @@
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
+import '../assets/global.css';
 
 function Header() {
     const { logout } = useAuth();
@@ -16,7 +17,7 @@ function Header() {
     }
 
     return (
-        <Navbar bg="primary" variant="dark" expand="lg" className="fixed-top">
+        <Navbar bg="white" variant="light" expand="lg" className="fixed-top border-bottom">
             <Container>
                 <Navbar.Brand>Admin Dashboard</Navbar.Brand>
                 <Nav className="ms-auto">
@@ -25,6 +26,7 @@ function Header() {
             </Container>
         </Navbar>
     );
+    
 }
 
 export default Header;
