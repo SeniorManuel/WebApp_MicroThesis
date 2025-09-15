@@ -4,8 +4,6 @@ import cors from "cors";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore"; 
 
-import serviceAccount from "./firebaseAdminKey.json" assert { type: "json" };
-
 dotenv.config();
 
 const app = express();
@@ -13,6 +11,15 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
+
+// use of environment variables
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  }),
+});
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount), // initializes firebase admin sdk with service account
