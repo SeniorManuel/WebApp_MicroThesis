@@ -21,10 +21,6 @@ admin.initializeApp({
   }),
 });
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount), // initializes firebase admin sdk with service account
-});
-
 const db = getFirestore();
 
 app.delete("/delete-user/:uid", async (req, res) => { // delete user
