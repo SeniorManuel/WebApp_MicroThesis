@@ -25,12 +25,15 @@ const db = getFirestore();
 
 app.get("/users", async (req, res) => {
   try {
-    const listUsersResult = await admin.auth().listUsers();
-    const users = listUsersResult.users.map(user => ({
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName || "", // fallback if no name
-    }));
+    const snapshot = await db.collection("users").get();
+    const users = snapshot.docs
+      .map(doc => ({
+        uid: doc.id,
+        email: doc.data().email || "",
+        fullName: doc.data().fullName || "",
+        isAdmin: doc.data().isAdmin === "true" || doc.data().admin === "true",
+      }))
+      .filter(user => !user.isAdmin); // exclude admins
 
     res.json(users);
   } catch (error) {
