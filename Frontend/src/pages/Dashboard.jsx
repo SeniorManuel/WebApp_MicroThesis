@@ -19,22 +19,37 @@ const Dashboard = () => {
     }
   }, [currentUser, navigate]);
 
-  const handleDeleteUser = async (uid) => {
-    const result = await deleteUser(uid); // API helper
-    alert(result.message); // show backend response 
+  const fetchUsers = async () => {
+    try {
+      const data = await getUsers();
+      const filterAd = data.filter(user => !user.isAdmin); // filter out admins
+      setUsers(filterAd);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   };
 
-  useEffect(() => {
-    const details = onSnapshot(collection(db, "users"), (snapshot) => {
-      const usersList = snapshot.docs.map(doc => ({
-        ...doc.data(),
-        uid: doc.id
-      }));
-      const filterAd = usersList.filter(user => !user.isAdmin); // filter out admin
-      setUsers(filterAd);
-    });
-    return () => details();
+   useEffect(() => {
+    fetchUsers();
   }, [currentUser]);
+
+  // const handleDeleteUser = async (uid) => {
+  //   const result = await deleteUser(uid); // API helper
+  //   alert(result.message); // show backend response 
+  // };
+
+  const handleDeleteUser = async (uid) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+
+    try {
+      const result = await deleteUser(uid);
+      alert(result.message);
+      fetchUsers(); // refresh list after delete
+    } catch (error) {
+      alert("Error deleting user: " + error.message);
+    }
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-start min-vh-100">

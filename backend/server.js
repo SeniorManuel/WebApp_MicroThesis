@@ -23,6 +23,22 @@ admin.initializeApp({
 
 const db = getFirestore();
 
+app.get("/users", async (req, res) => {
+  try {
+    const listUsers = await admin.auth().listUsers();
+    const users = listUsers.users.map(user => ({
+      uid: user.uid,
+      email: user.email,
+      fullName: user.displayName || "", // fallback if no displayName
+    }));
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Failed to fetch users" });
+  }
+});
+
 app.delete("/delete-user/:uid", async (req, res) => { // delete user
   const { uid } = req.params;
 
