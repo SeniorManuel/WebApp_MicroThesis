@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase/firebase";
 import Header from "../components/Header";
 import { Card, Container } from "react-bootstrap";
-import { deleteUser } from "../api";  // import helper
+import { deleteUser, getUsers } from "../api"; 
 import '../assets/global.css';
 
 const Dashboard = () => {
@@ -29,14 +27,9 @@ const Dashboard = () => {
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     fetchUsers();
   }, [currentUser]);
-
-  // const handleDeleteUser = async (uid) => {
-  //   const result = await deleteUser(uid); // API helper
-  //   alert(result.message); // show backend response 
-  // };
 
   const handleDeleteUser = async (uid) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
@@ -51,6 +44,11 @@ const Dashboard = () => {
     }
   };
 
+  // const handleDeleteUser = async (uid) => {
+  //   const result = await deleteUser(uid); // API helper
+  //   alert(result.message); // show backend response 
+  // };
+
   return (
     <div className="d-flex justify-content-center align-items-start min-vh-100">
       <Header />
@@ -60,7 +58,7 @@ const Dashboard = () => {
           <Card key={index} className="mb-3 shadow-sm">
             <Card.Body>
               <h5 className="card-title">Full Name:</h5>
-              <p className="card-text">{user.fullName}</p>
+              <p className="card-text">{user.displayName || user.fullName || "No name"}</p>
               <h5 className="card-title">Email Address:</h5>
               <p className="card-text">{user.email}</p>
               <button
@@ -78,3 +76,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+

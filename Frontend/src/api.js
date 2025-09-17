@@ -17,15 +17,11 @@ export async function deleteUser(uid) {
 
 export async function getUsers() {
   try {
-    const response = await fetch("https://webapp-microthesis-1.onrender.com/users", {
-      method: "GET",
-    });
-
+    const response = await fetch("https://webapp-microthesis-1.onrender.com/users");
     if (!response.ok) {
       throw new Error("Failed to fetch users");
     }
-
-    return await response.json(); // returns an array of users
+    return await response.json();
   } catch (error) {
     console.error("Error fetching users:", error);
     return [];
