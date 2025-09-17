@@ -25,15 +25,19 @@ const db = getFirestore();
 
 app.get("/users", async (req, res) => {
   try {
+    const listUsersResult = await admin.auth().listUsers();
+    const authUids = new Set(listUsersResult.users.map(u => u.uid));
     const snapshot = await db.collection("users").get();
+    
     const users = snapshot.docs
       .map(doc => ({
         uid: doc.id,
         email: doc.data().email || "",
         fullName: doc.data().fullName || "",
-        isAdmin: doc.data().isAdmin === "true" || doc.data().admin === "true",
+        isAdmin: doc.data().isAdmin === "true" || doc.data().admin === "true"
       }))
-      .filter(user => !user.isAdmin); // exclude admins
+      .filter(user => authUids.has(user.uid))
+      .filter(user => !user.isAdmin);
 
     res.json(users);
   } catch (error) {
@@ -41,6 +45,7 @@ app.get("/users", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 });
+
 
 app.delete("/delete-user/:uid", async (req, res) => { // delete user
   const { uid } = req.params;
