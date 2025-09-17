@@ -17,17 +17,17 @@ const Dashboard = () => {
     }
   }, [currentUser, navigate]);
 
-  const fetchUsers = async () => {
-    try {
-      const data = await getUsers();
-      const filterAd = data.filter(user => !user.isAdmin); // filter out admins
-      setUsers(filterAd);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
+   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await getUsers();
+        const filterAd = data.filter(user => !user.isAdmin); // remove admins
+        setUsers(filterAd);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
 
-  useEffect(() => {
     fetchUsers();
   }, [currentUser]);
 
@@ -38,7 +38,9 @@ const Dashboard = () => {
     try {
       const result = await deleteUser(uid);
       alert(result.message);
-      fetchUsers(); // refresh list after delete
+      const data = await getUsers();
+      const filterAd = data.filter(user => !user.isAdmin);
+      setUsers(filterAd);
     } catch (error) {
       alert("Error deleting user: " + error.message);
     }
